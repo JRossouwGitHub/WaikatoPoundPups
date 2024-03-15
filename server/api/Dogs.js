@@ -35,7 +35,8 @@ Router.post('/', async (req, res) => {
         },
         modified: {
             user: req.body.modified.user
-        }
+        },
+        adoption: req.body.adoption
     });
     await dog.save()
         .then((dogs) => {
@@ -73,7 +74,8 @@ Router.put('/:id', async (req, res) => {
         image: req.body.image,
         modified: {
             user: req.body.modified.user
-        }
+        },
+        adoption: req.body.adoption
     }
     await Dogs.findOneAndUpdate({ _id: req.params.id }, dog)
         .then((dogs) => {
