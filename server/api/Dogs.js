@@ -4,6 +4,12 @@ const Router = express.Router();
 const Dogs = require('../models/Dogs');
 const QRCode = require('qrcode');
 
+Router.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 Router.get('/', async (req, res) => {
     await Dogs.find()
         .then(dogs => res.status(200).json(dogs))
@@ -30,8 +36,8 @@ Router.post('/', async (req, res) => {
         color: req.body.color,
         description: req.body.description,
         medical_history: {
-            desexed: req.body.desexed,
-            parvo: req.body.parvo
+            desexed: req.body.medical_history.desexed,
+            parvo: req.body.medical_history.parvo
         },
         modified: {
             user: req.body.modified.user
@@ -68,8 +74,8 @@ Router.put('/:id', async (req, res) => {
         color: req.body.color,
         description: req.body.description,
         medical_history: {
-            desexed: req.body.desexed,
-            parvo: req.body.parvo
+            desexed: req.body.medical_history.desexed,
+            parvo: req.body.medical_history.parvo
         },
         image: req.body.image,
         modified: {
