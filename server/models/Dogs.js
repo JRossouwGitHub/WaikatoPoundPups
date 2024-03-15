@@ -33,6 +33,11 @@ const DogSchema = new mongoose.Schema({
             default: false
         }
     },
+    adoption: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
     image: {
         type: String,
         required: false
