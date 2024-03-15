@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
 const Dogs = require('./api/Dogs');
+const config = require('./config');
+
+mongoose.connect(config.dbURI.replace('<username>', config.dbUsername).replace('<password>', config.dbPassword));
 
 const app = express();
 

@@ -1,25 +1,101 @@
 //Create a router for express
 const express = require('express');
 const Router = express.Router();
+const Dogs = require('../models/Dogs');
+const QRCode = require('qrcode');
 
-Router.get('/', (req, res) => {
-    res.send('Get All Dogs');
+Router.get('/', async (req, res) => {
+    await Dogs.find()
+        .then(dogs => res.status(200).json(dogs))
+        .catch(err => res.status(400).json(err));
 });
 
-Router.get('/:id', (req, res) => {
-    res.send('Get Dog by ID' + req.params.id);
+Router.get('/:id', async (req, res) => {
+    await Dogs.find({ _id: req.params.id })
+        .then((dogs) => {
+            if (!dogs[0]){
+                res.status(404).json({message: 'Dog not found.'});
+            } else {
+                res.status(200).json(dogs[0])
+            }
+        })
+        .catch(err => res.status(400).json(err));
 });
 
-Router.post('/', (req, res) => {
-    res.send('Add Dog' + JSON.stringify(req.body));
+Router.post('/', async (req, res) => {
+    const dog = new Dogs({
+        name: req.body.name,
+        dob: req.body.dob,
+        breed: req.body.breed,
+        color: req.body.color,
+        description: req.body.description,
+        medical_history: {
+            desexed: req.body.desexed,
+            parvo: req.body.parvo
+        },
+        modified: {
+            user: req.body.modified.user
+        }
+    });
+    await dog.save()
+        .then((dogs) => {
+            QRCode.toDataURL('http://localhost:3000/dog/' + dogs._id, (err, url) => {
+                if (err) {
+                    res.status(500).json({message: 'Dog added successfully but failed to generate QRCode.'})
+                } else {
+                    Dogs.findOneAndUpdate({ _id: dogs._id }, { qrCode: url })
+                        .then((dogs) => {
+                            if (!dogs){
+                                console.log('Dog not found.');
+                            } else {
+                                console.log('Dog updated successfully.')
+                            }
+                        })
+                        .catch(err => res.status(400).json(err));
+                    res.status(200).json({message: 'Dog added successfully.'})
+                }
+            })
+        })
+        .catch(err => res.status(400).json(err));
 })
 
-Router.put('/:id', (req, res) => {
-    res.send('Update Dog' + req.params.id);
+Router.put('/:id', async (req, res) => {
+    const dog = {
+        name: req.body.name,
+        dob: req.body.dob,
+        breed: req.body.breed,
+        color: req.body.color,
+        description: req.body.description,
+        medical_history: {
+            desexed: req.body.desexed,
+            parvo: req.body.parvo
+        },
+        image: req.body.image,
+        modified: {
+            user: req.body.modified.user
+        }
+    }
+    await Dogs.findOneAndUpdate({ _id: req.params.id }, dog)
+        .then((dogs) => {
+            if (!dogs){
+                res.status(404).json({message: 'Dog not found.'});
+            } else {
+                res.status(200).json({message: 'Dog updated successfully.'})
+            }
+        })
+        .catch(err => res.status(400).json(err));
 })
 
-Router.delete('/:id', (req, res) => {
-    res.send('Delete Dog' + req.params.id);
+Router.delete('/:id', async (req, res) => {
+    await Dogs.deleteOne({ _id: req.params.id })
+        .then((dogs) => {
+            if (dogs.deletedCount === 0){
+                res.status(404).json({message: 'Dog not found.'});
+            } else {
+                res.status(200).json({message: 'Dog deleted successfully.'})
+            }
+        })
+        .catch(err => res.status(400).json(err));
 })
 
 module.exports = Router
