@@ -1,0 +1,15 @@
+{
+  "name": "waikatopoundpups",
+  "version": "1.0.0",
+  "description": "Web App for Waikato Pound Pups",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd client/wpp-client && npm run dev\" \"cd server && npm run dev\"",
+    "start": "concurrently \"cd client/wpp-client && npm run start\" \"cd server && npm run start\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
