@@ -9,6 +9,10 @@ const DogSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    sex: {
+        type: String,
+        required: true
+    },
     breed: {
         type: String,
         required: true
@@ -22,24 +26,19 @@ const DogSchema = new mongoose.Schema({
         required: true
     },
     medical_history: {
-        desexed: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        parvo: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
+        type: Array,
+        required: false
     },
-    adoption: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    image: {
+    status: {
         type: String,
+        required: false,
+    },
+    location: {
+        type: String,
+        required: false
+    },
+    images: {
+        type: Array,
         required: false
     },
     qrCode: {
@@ -56,6 +55,11 @@ const DogSchema = new mongoose.Schema({
             required: true,
             default: Date.now
         }
+    },
+    archived: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 

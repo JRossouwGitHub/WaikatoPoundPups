@@ -32,17 +32,16 @@ Router.post('/', async (req, res) => {
     const dog = new Dogs({
         name: req.body.name,
         dob: req.body.dob,
+        sex: req.body.sex,
         breed: req.body.breed,
         color: req.body.color,
         description: req.body.description,
-        medical_history: {
-            desexed: req.body.medical_history.desexed,
-            parvo: req.body.medical_history.parvo
-        },
+        medical_history: req.body.medical_history,
         modified: {
             user: req.body.modified.user
         },
-        adoption: req.body.adoption
+        status: req.body.status,
+        images: req.body.images
     });
     await dog.save()
         .then((dogs) => {
@@ -70,18 +69,16 @@ Router.put('/:id', async (req, res) => {
     const dog = {
         name: req.body.name,
         dob: req.body.dob,
+        sex: req.body.sex,
         breed: req.body.breed,
         color: req.body.color,
         description: req.body.description,
-        medical_history: {
-            desexed: req.body.medical_history.desexed,
-            parvo: req.body.medical_history.parvo
-        },
-        image: req.body.image,
+        medical_history: req.body.medical_history,
         modified: {
             user: req.body.modified.user
         },
-        adoption: req.body.adoption
+        status: req.body.status,
+        images: req.body.images
     }
     await Dogs.findOneAndUpdate({ _id: req.params.id }, dog)
         .then((dogs) => {
