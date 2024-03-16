@@ -33,7 +33,7 @@ export default function Card({dog}) {
         <Stack direction="row" spacing={3}>
             <CardPaper square={false} elevation={1} variant="outlined">
                 <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold" }}>{dog.name}</Typography>
-                <Image src={'https://picsum.photos/100/100'} alt={dog.name} width={isMobile ? 100 : 200} height={isMobile ? 100 : 200} />
+                <Image src={dog.images[0]} alt={dog.name} width={isMobile ? 100 : 200} height={isMobile ? 100 : 200} />
                 <Typography><strong>DOB:</strong> {formatDate(dog.dob)} <i>({yearsDiff(new Date(dog.dob)).toFixed(1)} y/o)</i></Typography>
                 <Typography><strong>Color:</strong> {dog.color}</Typography>
                 <Typography><strong>Breed:</strong> {dog.breed}</Typography>
